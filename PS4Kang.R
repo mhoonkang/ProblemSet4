@@ -3,6 +3,7 @@
 
 ## Reading in data without a clean format
 ## making a function
+rm(list=ls())
 netlogo <- function(x){
   
   # Both "file.csv" and "file" can be input because the following
@@ -671,11 +672,9 @@ colnames(pop) <- c("heights", "generation")
 
 # plot histogram
 library(lattice)
-histogram(~ heights | generation, data=pop, levels=c(9:1), main="Distribution of height by generation", as.tabl=TRUE )
+histogram(~ heights | generation, data=pop, levels=c(9:1), main="Distribution of height by generation", as.table=TRUE )
 
 ## problem 4
 library(spuRs)
 data(treeg)
 xyplot(height.ft~age, data=treeg, type='l', group=tree.ID, xlab="age (years)", ylab="height (feet)")
-
-
