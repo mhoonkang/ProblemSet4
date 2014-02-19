@@ -340,7 +340,7 @@ netlogo <- function(x){
   n.of.x <- scan(file.name, what="", n=6, skip=D6.info.begin+3, sep=",")
   n.of.x <- ifelse(as.numeric(n.of.x[6])!=0,as.numeric(n.of.x[6])+1,0)
   position.begin.6 <- D6.info.begin + n.of.pen+6
-  
+    
   if(n.of.x !=0){
     plot.d6 <- scan(file.name, what="", n=-1, nlines=n.of.x, skip=position.begin.6, sep=",")
     plot.d6 <- subset(plot.d6, plot.d6!="")
@@ -351,6 +351,141 @@ netlogo <- function(x){
     plot.d6 <- cbind(period, plot.d6)
     write.csv(plot.d6, paste(toplevel,"/Plots/PositionPlot/D6.csv", sep=""), row.names=FALSE) 
   }
+
+  # To set the range of y axis, we need to use the maximum and minimum value
+  # from the data as the boundary for the y axis for each dimension
+  # dimension 1.
+  min.red.incum <- min(as.numeric(plot.d1[,2]))
+  min.blue.incum <- min(as.numeric(plot.d1[,3]))
+  min.red.act <- min(as.numeric(plot.d1[,4]))
+  min.red.voter <- min(as.numeric(plot.d1[,5]))
+  min.blue.voter <- min(as.numeric(plot.d1[,6]))
+  min.blue.act <- min(as.numeric(plot.d1[,7]))
+  max.red.incum <- max(as.numeric(plot.d1[,2]))
+  max.blue.incum <- max(as.numeric(plot.d1[,3]))
+  max.red.act <- max(as.numeric(plot.d1[,4]))
+  max.red.voter <- max(as.numeric(plot.d1[,5]))
+  max.blue.voter <- max(as.numeric(plot.d1[,6]))
+  max.blue.act <- max(as.numeric(plot.d1[,7]))
+  
+  min1 <- min(min.red.incum, min.blue.incum, min.red.act, min.red.voter, min.blue.voter, min.blue.act)
+  max1 <- max(max.red.incum, max.blue.incum, max.red.act, max.red.voter, max.blue.voter, max.blue.act)
+  
+  # min and max for dimension 2
+  min.red.incum <- min(as.numeric(plot.d2[,2]))
+  min.blue.incum <- min(as.numeric(plot.d2[,3]))
+  min.red.act <- min(as.numeric(plot.d2[,4]))
+  min.red.voter <- min(as.numeric(plot.d2[,5]))
+  min.blue.voter <- min(as.numeric(plot.d2[,6]))
+  min.blue.act <- min(as.numeric(plot.d2[,7]))
+  max.red.incum <- max(as.numeric(plot.d2[,2]))
+  max.blue.incum <- max(as.numeric(plot.d2[,3]))
+  max.red.act <- max(as.numeric(plot.d2[,4]))
+  max.red.voter <- max(as.numeric(plot.d2[,5]))
+  max.blue.voter <- max(as.numeric(plot.d2[,6]))
+  max.blue.act <- max(as.numeric(plot.d2[,7]))
+  
+  min2 <- min(min.red.incum, min.blue.incum, min.red.act, min.red.voter, min.blue.voter, min.blue.act)
+  max2 <- max(max.red.incum, max.blue.incum, max.red.act, max.red.voter, max.blue.voter, max.blue.act)  
+  
+  # min and max for dimension 3
+  min.red.incum <- min(as.numeric(plot.d3[,2]))
+  min.blue.incum <- min(as.numeric(plot.d3[,3]))
+  min.red.act <- min(as.numeric(plot.d3[,4]))
+  min.red.voter <- min(as.numeric(plot.d3[,5]))
+  min.blue.voter <- min(as.numeric(plot.d3[,6]))
+  min.blue.act <- min(as.numeric(plot.d3[,7]))
+  max.red.incum <- max(as.numeric(plot.d3[,2]))
+  max.blue.incum <- max(as.numeric(plot.d3[,3]))
+  max.red.act <- max(as.numeric(plot.d3[,4]))
+  max.red.voter <- max(as.numeric(plot.d3[,5]))
+  max.blue.voter <- max(as.numeric(plot.d3[,6]))
+  max.blue.act <- max(as.numeric(plot.d3[,7]))
+  
+  min3 <- min(min.red.incum, min.blue.incum, min.red.act, min.red.voter, min.blue.voter, min.blue.act)
+  max3 <- max(max.red.incum, max.blue.incum, max.red.act, max.red.voter, max.blue.voter, max.blue.act)  
+  
+  # x for each dimension
+  x1 <- length(plot.d1[,1]) # x axis for D1
+  x2 <- length(plot.d2[,1]) # x axis for D2
+  x3 <- length(plot.d3[,1]) # x axis for D3
+  
+  # save plot as a pdf file. 
+  pdf(paste(toplevel,"/Plots/PositionPlot/Positions.pdf",sep=""), width=12)
+  
+  # plot dimension 1
+  plot(plot.d1[,1], plot.d1[,2], col="red", type='l', xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="", 
+       main="The average position of incumbent cadidates,\n activists, and voters along dimension 1", pch=19)
+  par(new=TRUE)
+  plot(plot.d1[,1], plot.d1[,4], col="red", type='l', lty=2, xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d1[,1], plot.d1[,5], col="red", type='l', lty=3, xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d1[,1], plot.d1[,3], col="blue", type='l', lty=1, xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d1[,1], plot.d1[,7], col="blue", type='l', lty=2, xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d1[,1], plot.d1[,6], col="blue", type='l', lty=3, xlim=c(0,x1), 
+       ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  axis(1, at=1:x1)
+  axis(2, at=c(seq(floor(min1), ceiling(max1), by=1)))
+  legend("top",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
+         cex=1, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
+  
+  # plot dimension 2
+  plot(plot.d2[,1], plot.d2[,2], col="red", type='l', xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="", 
+       main="The average position of incumbent cadidates,\n activists, and voters along dimension 2", pch=19)
+  par(new=TRUE)
+  plot(plot.d2[,1], plot.d2[,4], col="red", type='l', lty=2, xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d2[,1], plot.d2[,5], col="red", type='l', lty=3, xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d2[,1], plot.d2[,3], col="blue", type='l', lty=1, xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d2[,1], plot.d2[,7], col="blue", type='l', lty=2, xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d2[,1], plot.d2[,6], col="blue", type='l', lty=3, xlim=c(0,x2), 
+       ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  axis(1, at=1:x2)
+  axis(2, at=c(seq(floor(min2), ceiling(max2), by=1)))
+  legend("center",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
+         cex=0.6, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
+  
+  # plot dimension 3
+  plot(plot.d3[,1], plot.d3[,2], col="red", type='l', xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="", 
+       main="The average position of incumbent cadidates,\n activists, and voters along dimension 3", pch=19)
+  par(new=TRUE)
+  plot(plot.d3[,1], plot.d3[,4], col="red", type='l', lty=2, xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d3[,1], plot.d3[,5], col="red", type='l', lty=3, xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d3[,1], plot.d3[,3], col="blue", type='l', lty=1, xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d3[,1], plot.d3[,7], col="blue", type='l', lty=2, xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  par(new=TRUE)
+  plot(plot.d3[,1], plot.d3[,6], col="blue", type='l', lty=3, xlim=c(0,x3), 
+       ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
+  axis(1, at=1:x3)
+  axis(2, at=c(seq(floor(min3), ceiling(max3), by=1)))
+  legend("bottomright",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
+         cex=1, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
+  dev.off()
+  
   
   ## data for winner.
   interval <- n.of.x+3
@@ -382,7 +517,7 @@ netlogo <- function(x){
   max.red <- as.numeric(max(winner[,4]))
   min <- min(min.blue, min.red)
   max <- max(max.blue, max.red)
-  
+      
   # save plot as a pdf file. 
   pdf(paste(toplevel,"/Plots/WinnersPlot/Winner.pdf",sep=""), width=12)
   plot(winner[,1], winner[,2], col="blue", type='l', xlim=c(0,n.of.x), 
@@ -391,7 +526,7 @@ netlogo <- function(x){
   par(new=TRUE)
   plot(winner[,1], winner[,4], col="red", type='l', xlim=c(0,n.of.x), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=c(seq(0,n.of.x,by=1)))
+  axis(1, at=1:n.of.x)
   axis(2, at=c(seq(floor(min), ceiling(max), by=5)))
   legend("topleft",legend=c("BLUE Party", "RED Party"),
           cex=1, lty=c(1,1), col=c("blue","red"), bty='n')
