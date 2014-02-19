@@ -79,6 +79,7 @@ netlogo <- function(x){
   
   # extracting the name of column for turtles
   col.names <- scan(file.name, what="", n=-1, nlines=1, skip=turtles.begin, sep=",")
+  # drop meaningless elements
   col.names <- subset(col.names, col.names!="")
   
   # extracting the values of turtles and making it as a data frame. 
@@ -204,6 +205,7 @@ netlogo <- function(x){
   patches.begin <- turtles.begin+total.obs+2
   patches.length <- (abs(unlist(global['min-pxcor']))+abs(unlist(global['max-pxcor']))+1)*(abs(unlist(global['min-pycor']))+abs(unlist(global['max-pycor']))+1)+13
   
+  ## data for D1
   # the number of row in which 'D1 overall information' section begin
   D1.info.begin <- patches.begin+patches.length 
   
@@ -229,20 +231,30 @@ netlogo <- function(x){
   # I guess that this simulation can have at best six dimensions. 
   # So, the dimension can vary according to the setting of the simulation.
   # Therefore, if the dimension is used in the simulation(i.e. x>0),
-  # I will extract the data for this dimension, skip otherwise.
+  # I will extract the data for this dimension and writing as .csv file, skip otherwise.
   if(n.of.x !=0){
-  plot.d1 <- scan(file.name, what="", n=-1, nlines=n.of.x, skip=position.begin, sep=",")
-  plot.d1 <- subset(plot.d1, plot.d1!="")
-  plot.d1 <- matrix(plot.d1, n.of.x, 4*n.of.pen, byrow=TRUE)
-  plot.d1 <- plot.d1[,seq(2,(4*n.of.pen-2), by=4)]
-  colnames(plot.d1) <- col.names
-  period <- 0:(n.of.x-1)
-  plot.d1 <- cbind(period, plot.d1)
-  write.csv(plot.d1, paste(toplevel,"/Plots/PositionPlot/D1.csv", sep=""), row.names=FALSE) 
-  } 
+   plot.d1 <- scan(file.name, what="", n=-1, nlines=n.of.x, skip=position.begin, sep=",")
+   plot.d1 <- subset(plot.d1, plot.d1!="") # drop meaningless elements
+   plot.d1 <- matrix(plot.d1, n.of.x, 4*n.of.pen, byrow=TRUE) # making a matrix
+   plot.d1 <- plot.d1[,seq(2,(4*n.of.pen-2), by=4)] #extracting Y values for each.
+   colnames(plot.d1) <- col.names # setting the column names
+   period <- 0:(n.of.x-1) # period(x) 
+   plot.d1 <- cbind(period, plot.d1) # combine the data with period(x)
   
-  interval <- n.of.x+3
-  D2.info.begin <- position.begin+interval 
+   
+   write.csv(plot.d1, paste(toplevel,"/Plots/PositionPlot/D1.csv", sep=""), row.names=FALSE) 
+  } 
+    
+  ## data for D2.
+  # the following codes are identical with what used in D1.
+  interval <- n.of.x+3 # This is the number of rows between the end of the data and
+                       # beginning of the data for new dimension.
+                       # Also, the number of x (n.of.x) will be updated 
+                       # every section.
+    
+  D2.info.begin <- position.begin+interval # We can specify row number in which
+                                           # new dataset begins by doing this.
+  
   n.of.pen <- scan(file.name, what="", n=8, skip=D2.info.begin, sep=",")
   n.of.pen <- as.numeric(n.of.pen[8])
   n.of.x <- scan(file.name, what="", n=6, skip=D2.info.begin+3, sep=",")
@@ -260,6 +272,7 @@ netlogo <- function(x){
   write.csv(plot.d2, paste(toplevel,"/Plots/PositionPlot/D2.csv", sep=""), row.names=FALSE) 
   }
   
+  ## data for D3.
   interval <- n.of.x+3
   D3.info.begin <- position.begin.2+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=D3.info.begin, sep=",")
@@ -279,6 +292,7 @@ netlogo <- function(x){
   write.csv(plot.d3, paste(toplevel,"/Plots/PositionPlot/D3.csv", sep=""), row.names=FALSE) 
   }
   
+  ## data for D4.
   interval <- n.of.x+3
   D4.info.begin <- position.begin.3+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=D4.info.begin, sep=",")
@@ -298,6 +312,7 @@ netlogo <- function(x){
     write.csv(plot.d4, paste(toplevel,"/Plots/PositionPlot/D4.csv", sep=""), row.names=FALSE) 
   }
   
+  ## data for D5.
   interval <- n.of.x+3
   D5.info.begin <- position.begin.4+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=D5.info.begin, sep=",")
@@ -317,6 +332,7 @@ netlogo <- function(x){
     write.csv(plot.d5, paste(toplevel,"/Plots/PositionPlot/D5.csv", sep=""), row.names=FALSE) 
   }
   
+  ## data for D6.
   interval <- n.of.x+3
   D6.info.begin <- position.begin.5+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=D6.info.begin, sep=",")
@@ -336,6 +352,7 @@ netlogo <- function(x){
     write.csv(plot.d6, paste(toplevel,"/Plots/PositionPlot/D6.csv", sep=""), row.names=FALSE) 
   }
   
+  ## data for winner.
   interval <- n.of.x+3
   winner.info <- position.begin.6+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=winner.info, sep=",")
@@ -343,7 +360,7 @@ netlogo <- function(x){
   n.of.x <- scan(file.name, what="", n=6, skip=winner.info+3, sep=",")
   n.of.x <- ifelse(as.numeric(n.of.x[6])!=0,as.numeric(n.of.x[6])+1,0)
   winner.begin <- winner.info+n.of.pen+6
-  
+    
   col.names <- scan(file.name, what="", n=-1, nlines=1, skip=winner.begin-2, sep=",")
   col.names <- subset(col.names, col.names!="")
   winner <- scan(file.name, what="", n=-1, nlines=n.of.x, skip=winner.begin, sep=",")
@@ -353,15 +370,20 @@ netlogo <- function(x){
   colnames(winner) <- col.names
   period <- 0:(n.of.x-1)
   winner <- cbind(period, winner)
-  winnter <- sapply(winner, as.numeric)
   write.csv(winner, paste(toplevel,"/Plots/WinnersPlot/Winner.csv", sep=""), row.names=FALSE) 
   
+  # plot winner. 
+  # To set the range of y axis, we need to use the maximum and minimum value
+  # from the data as the boundary for the axis.
+  # the number of x (n.of.x) can be used as a x axis. 
   min.blue <- as.numeric(min(winner[,2]))
   min.red <- as.numeric(min(winner[,4]))
   max.blue <- as.numeric(max(winner[,2]))
   max.red <- as.numeric(max(winner[,4]))
-  min <- min(min.blue, min.red)-5
-  max <- max(max.blue, max.red)+5
+  min <- min(min.blue, min.red)
+  max <- max(max.blue, max.red)
+  
+  # save plot as a pdf file. 
   pdf(paste(toplevel,"/Plots/WinnersPlot/Winner.pdf",sep=""), width=12)
   plot(winner[,1], winner[,2], col="blue", type='l', xlim=c(0,n.of.x), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
@@ -375,6 +397,7 @@ netlogo <- function(x){
           cex=1, lty=c(1,1), col=c("blue","red"), bty='n')
   dev.off()
   
+  ## data for polarization.
   interval <- n.of.x+3
   polar.info <- winner.begin+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=polar.info, sep=",")
@@ -394,6 +417,7 @@ netlogo <- function(x){
   polar <- cbind(period, polar)
   write.csv(polar, paste(toplevel,"/Plots/PolarizationPlot/Polarization.csv", sep=""), row.names=FALSE) 
   
+  # plot and save polarization
   min.total <- as.numeric(min(polar[,2]))
   min.voter <- as.numeric(min(polar[,3]))
   min.activ <- as.numeric(min(polar[,4]))
@@ -401,7 +425,7 @@ netlogo <- function(x){
   max.voter <- as.numeric(max(polar[,3]))
   max.activ <- as.numeric(max(polar[,4]))
   min <- min(min.total, min.voter, min.activ)
-  max <- max(max.total, max.voter, max.activ)+2
+  max <- max(max.total, max.voter, max.activ)
   pdf(paste(toplevel,"/Plots/PolarizationPlot/PolarizationPlot.pdf",sep=""), width=12)
   plot(polar[,1], polar[,2], col="black", type='l', xlim=c(0,n.of.x), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="", 
@@ -418,6 +442,7 @@ netlogo <- function(x){
           cex=1, lty=c(1,1,1), col=c("black","green","purple"), bty='n')
   dev.off()
   
+  ## data for incumbents
   interval <- n.of.x+3
   Incum.info <- polar.begin+interval
   n.of.pen <- scan(file.name, what="", n=8, skip=Incum.info, sep=",")
@@ -434,8 +459,9 @@ netlogo <- function(x){
   percent <- cbind(period, percent)
   write.csv(percent, paste(toplevel,"/Plots/IncumbentPercentagePlot/IncumbentWins.csv", sep=""), row.names=FALSE) 
 
+  # plot and save incumbents
   min <- as.numeric(min(percent[,2]))
-  max <- as.numeric(max(percent[,2]))+5
+  max <- as.numeric(max(percent[,2]))
   pdf(paste(toplevel,"/Plots/IncumbentPercentagePlot/IncumbentWins.pdf",sep=""), width=12)
   plot(percent[,1], percent[,2], col="black", type='l', xlim=c(0,n.of.x), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
