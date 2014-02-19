@@ -522,7 +522,7 @@ netlogo <- function(x){
   pdf(paste(toplevel,"/Plots/WinnersPlot/Winner.pdf",sep=""), width=12)
   plot(winner[,1], winner[,2], col="blue", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
-       main="Percentage of candidates from each party\n \"Won\" in each cycle", pch=19)
+       main="The percentage of candidates from each party\n \"Won\" in each cycle", pch=19)
   par(new=TRUE)
   plot(winner[,1], winner[,4], col="red", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
@@ -600,7 +600,7 @@ netlogo <- function(x){
   pdf(paste(toplevel,"/Plots/IncumbentPercentagePlot/IncumbentWins.pdf",sep=""), width=12)
   plot(percent[,1], percent[,2], col="black", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
-       main="the percentage of incumbent candidates in each party\n that are \"winning\" in each time period", pch=19)
+       main="The percentage of incumbent candidates in each party\n that are \"winning\" in each time period", pch=19)
   axis(1, at=period)
   axis(2, at=c(seq(floor(min), ceiling(max), by=5)))
   dev.off()
@@ -608,3 +608,74 @@ netlogo <- function(x){
 
 x <- "NetLogo.csv"
 netlogo(x)
+
+
+## JMR Chapter 4 
+# Problem 3
+
+# input is 7
+n <- 7
+
+# display square and cube
+cat("number     square      cube\n\n")
+for(i in 1:n){
+  square <- i^2
+  cube <- i^3
+  cat(format(i, width=6),
+      format(square, width=11),
+      format(cube, width=10),
+      "\n", sep="")
+}
+# The problem assumes that there is only the above code.
+# So, assume that this code is saved in 'square_cube.r' file.
+
+source("square_cube.r")
+
+# Problem 4
+# make a matrix 'mtable'
+mtable <- matrix(1:9, 9, 9)
+for(i in 1:9){
+  mtable[,i]<-i*mtable[,i]
+}
+# show mtable
+show(mtable)
+
+# Again, assume that this code is saved in 'mult_table.r' file.
+source("mult_table.r")
+
+## JMR Chapter 7 
+# Problem 3
+set.seed(34521)
+pop <- data.frame(m=rnorm(100,160,20), f=rnorm(100,160,20))
+
+next.gen <- function(pop) {
+  pop$m <- sample(pop$m)
+  pop$m <- apply(pop, 1, mean)
+  pop$f <- pop$m
+  return(pop)
+}
+
+# generate nine generations by using a list
+pop <- list(pop, NULL)
+for(i in 1:8){
+  pop[[i+1]] <- next.gen(pop[[i]])
+}
+
+# make a data frame from a list
+for(i in 1:9){
+  pop[[i]] <- c(pop[[i]][,1], pop[[i]][,2])
+}
+pop <- unlist(pop)
+pop <- data.frame(pop, paste("generation", rep((1:9),rep(200,9)))) # input generation index
+colnames(pop) <- c("heights", "generation")
+
+# plot histogram
+library(lattice)
+histogram(~ heights | generation, data=pop, levels=c(9:1), main="Distribution of height by generation", as.tabl=TRUE )
+
+## problem 4
+library(spuRs)
+data(treeg)
+xyplot(height.ft~age, data=treeg, type='l', group=tree.ID, xlab="age (years)", ylab="height (feet)")
+
+
