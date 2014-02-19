@@ -406,9 +406,9 @@ netlogo <- function(x){
   max3 <- max(max.red.incum, max.blue.incum, max.red.act, max.red.voter, max.blue.voter, max.blue.act)  
   
   # x for each dimension
-  x1 <- length(plot.d1[,1]) # x axis for D1
-  x2 <- length(plot.d2[,1]) # x axis for D2
-  x3 <- length(plot.d3[,1]) # x axis for D3
+  x1 <- length(plot.d1[,1])-1 # x axis for D1
+  x2 <- length(plot.d2[,1])-1 # x axis for D2
+  x3 <- length(plot.d3[,1])-1 # x axis for D3
   
   # save plot as a pdf file. 
   pdf(paste(toplevel,"/Plots/PositionPlot/Positions.pdf",sep=""), width=12)
@@ -432,7 +432,7 @@ netlogo <- function(x){
   par(new=TRUE)
   plot(plot.d1[,1], plot.d1[,6], col="blue", type='l', lty=3, xlim=c(0,x1), 
        ylim=c(floor(min1), ceiling(max1)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=1:x1)
+  axis(1, at=0:x1)
   axis(2, at=c(seq(floor(min1), ceiling(max1), by=1)))
   legend("top",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
          cex=1, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
@@ -456,10 +456,10 @@ netlogo <- function(x){
   par(new=TRUE)
   plot(plot.d2[,1], plot.d2[,6], col="blue", type='l', lty=3, xlim=c(0,x2), 
        ylim=c(floor(min2), ceiling(max2)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=1:x2)
+  axis(1, at=0:x2)
   axis(2, at=c(seq(floor(min2), ceiling(max2), by=1)))
-  legend("center",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
-         cex=0.6, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
+  legend("topright",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
+         cex=0.7, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
   
   # plot dimension 3
   plot(plot.d3[,1], plot.d3[,2], col="red", type='l', xlim=c(0,x3), 
@@ -480,7 +480,7 @@ netlogo <- function(x){
   par(new=TRUE)
   plot(plot.d3[,1], plot.d3[,6], col="blue", type='l', lty=3, xlim=c(0,x3), 
        ylim=c(floor(min3), ceiling(max3)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=1:x3)
+  axis(1, at=0:x3)
   axis(2, at=c(seq(floor(min3), ceiling(max3), by=1)))
   legend("bottomright",legend=c("Red Incumbents", "Red Activists", "Red Voters", "Blue Incumbents", "Blue Activists", "Blue Voters"),
          cex=1, lty=c(1,2,3,1,2,3), col=c("red","red","red","blue","blue","blue"), bty='n')
@@ -510,7 +510,7 @@ netlogo <- function(x){
   # plot winner. 
   # To set the range of y axis, we need to use the maximum and minimum value
   # from the data as the boundary for the axis.
-  # the number of x (n.of.x) can be used as a x axis. 
+  # the number of x (n.of.x-1) can be used as an x axis. 
   min.blue <- as.numeric(min(winner[,2]))
   min.red <- as.numeric(min(winner[,4]))
   max.blue <- as.numeric(max(winner[,2]))
@@ -520,13 +520,13 @@ netlogo <- function(x){
       
   # save plot as a pdf file. 
   pdf(paste(toplevel,"/Plots/WinnersPlot/Winner.pdf",sep=""), width=12)
-  plot(winner[,1], winner[,2], col="blue", type='l', xlim=c(0,n.of.x), 
+  plot(winner[,1], winner[,2], col="blue", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
        main="Percentage of candidates from each party\n \"Won\" in each cycle", pch=19)
   par(new=TRUE)
-  plot(winner[,1], winner[,4], col="red", type='l', xlim=c(0,n.of.x), 
+  plot(winner[,1], winner[,4], col="red", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=1:n.of.x)
+  axis(1, at=period)
   axis(2, at=c(seq(floor(min), ceiling(max), by=5)))
   legend("topleft",legend=c("BLUE Party", "RED Party"),
           cex=1, lty=c(1,1), col=c("blue","red"), bty='n')
@@ -562,16 +562,16 @@ netlogo <- function(x){
   min <- min(min.total, min.voter, min.activ)
   max <- max(max.total, max.voter, max.activ)
   pdf(paste(toplevel,"/Plots/PolarizationPlot/PolarizationPlot.pdf",sep=""), width=12)
-  plot(polar[,1], polar[,2], col="black", type='l', xlim=c(0,n.of.x), 
+  plot(polar[,1], polar[,2], col="black", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="", 
        main="Euclidean distance between the mean position", pch=19)
   par(new=TRUE)
-  plot(polar[,1], polar[,3], col="green", type='l', xlim=c(0,n.of.x), 
+  plot(polar[,1], polar[,3], col="green", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
   par(new=TRUE)
-  plot(polar[,1], polar[,4], col="purple", type='l', xlim=c(0,n.of.x), 
+  plot(polar[,1], polar[,4], col="purple", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n',xlab="", ylab="", pch=19)
-  axis(1, at=c(seq(0,n.of.x,by=1)))
+  axis(1, at=period)
   axis(2, at=c(seq(floor(min), ceiling(max), by=1)))
   legend("topleft",legend=c("Candidates", "Voters", "Activists"), 
           cex=1, lty=c(1,1,1), col=c("black","green","purple"), bty='n')
@@ -598,10 +598,10 @@ netlogo <- function(x){
   min <- as.numeric(min(percent[,2]))
   max <- as.numeric(max(percent[,2]))
   pdf(paste(toplevel,"/Plots/IncumbentPercentagePlot/IncumbentWins.pdf",sep=""), width=12)
-  plot(percent[,1], percent[,2], col="black", type='l', xlim=c(0,n.of.x), 
+  plot(percent[,1], percent[,2], col="black", type='l', xlim=c(0,n.of.x-1), 
        ylim=c(floor(min), ceiling(max)), bty='n', xaxt='n', yaxt='n', xlab="period", ylab="percentage (%)", 
        main="the percentage of incumbent candidates in each party\n that are \"winning\" in each time period", pch=19)
-  axis(1, at=c(seq(0,n.of.x,by=1)))
+  axis(1, at=period)
   axis(2, at=c(seq(floor(min), ceiling(max), by=5)))
   dev.off()
 }
