@@ -696,7 +696,7 @@ source("mult_table.r")
 
 ## JMR Chapter 7 
 # Problem 3
-set.seed(34521)
+set.seed(8806331)
 pop <- data.frame(m=rnorm(100,160,20), f=rnorm(100,160,20))
 
 next.gen <- function(pop) {
@@ -717,12 +717,12 @@ for(i in 1:9){
   pop[[i]] <- pop[[i]][,1]
 }
 pop <- unlist(pop)
-pop <- data.frame(pop, paste("generation", rep((1:9),rep(200,9)))) # input generation index
-colnames(pop) <- c("heights", "generation")
+pop <- data.frame(pop, paste("generation", rep((1:9),rep(100,9)))) # input generation index
+colnames(pop) <- c("height", "generation")
 
 # plot histogram
 library(lattice)
-histogram(~ heights | generation, data=pop, levels=c(9:1), main="Distribution of male height by generation", as.table=TRUE )
+histogram(~ height | generation, data=pop, levels=c(9:1), main="Distribution of male height by generation", as.table=TRUE )
 
 ## problem 4
 library(spuRs)
