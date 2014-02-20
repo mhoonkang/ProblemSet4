@@ -124,7 +124,7 @@ netlogo <- function(x){
   districts[,6:8] <- district.prefs
   districts[,9:(9+n.col)] <- my.cands.district
   # Re-arranging the appropriate column names for each column. 
-  d.name[9:10] <- d.name[7]
+  d.name[9:(9+n.col)] <- d.name[7]
   d.name[7:8] <- d.name[6]  
   colnames(districts) <- d.name
   
@@ -205,11 +205,11 @@ netlogo <- function(x){
   parties <- matrix(parties, nrow=n.party, byrow=FALSE)
   parties[,7:9] <- m.position
   parties[,11:(11+n.col)] <- my.cand
-  parties[,219:221] <- enfo
+  parties[,(11+n.col+1):(11+n.col+3)] <- enfo
   p.name[223] <- p.name[12]
   p.name[222] <- p.name[11]  
-  p.name[219:221] <- p.name[10]
-  p.name[11:218] <- p.name[9]
+  p.name[(11+n.col+1):(11+n.col+3)] <- p.name[10]
+  p.name[11:(11+n.col)] <- p.name[9]
   p.name[10] <- p.name[8]
   p.name[8:9] <- p.name[7]
   colnames(parties) <- p.name
