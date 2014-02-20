@@ -107,16 +107,22 @@ netlogo <- function(x){
   d.name <- colnames(districts)
   
   # Breaking down the vectors into separate columns. 
+  # making a matrix whose each column includes one element of vectors for each observation
   district.prefs <- lapply(districts['district-prefs'], strsplit, split=" ")
   district.prefs <- unlist(district.prefs)
   district.prefs <- matrix(district.prefs, nrow=n.districts, byrow=TRUE)
   my.cands.district <- lapply(districts['my-cands-district'], strsplit, split=" ")
   my.cands.district <- unlist(my.cands.district)
   my.cands.district <- matrix(my.cands.district, nrow=n.districts, byrow=TRUE)
+  # in case of the change the number of candidates in district, we need to use
+  # the number of columns for candidate to know how many candidates in each district
+  n.col <- ncol(my.cands.district)-1
+  # the following matrix has wrong vector information
   districts <- unlist(lapply(districts, strsplit, split=" "))
   districts <- matrix(districts, nrow=n.districts, byrow=FALSE)
-  districts[,6:8] <- district.prefs[,1:3]
-  districts[,9:10] <- my.cands.district[,1:2]
+  # replacing wrong vector information with correct information
+  districts[,6:8] <- district.prefs
+  districts[,9:(9+n.col)] <- my.cands.district
   # Re-arranging the appropriate column names for each column. 
   d.name[9:10] <- d.name[7]
   d.name[7:8] <- d.name[6]  
@@ -143,8 +149,8 @@ netlogo <- function(x){
   voter.sal <- matrix(voter.sal,nrow=n.voters,byrow=TRUE)
   voters <- unlist(sapply(voters, strsplit, split=" "))
   voters <- matrix(voters, nrow=n.voters, byrow=FALSE)
-  voters[,7:9] <- prefs[,1:3]
-  voters[,11:13] <- voter.sal[,1:3]
+  voters[,7:9] <- prefs
+  voters[,11:13] <- voter.sal
   v.name[11:13] <- v.name[9]
   v.name[10] <- v.name[8]  
   v.name[8:9] <- v.name[7]
@@ -168,8 +174,8 @@ netlogo <- function(x){
   act.sal <- matrix(act.sal, nrow=n.activists, byrow=TRUE)
   activists <- unlist(sapply(activists, strsplit, split=" "))
   activists <- matrix(activists, nrow=n.activists, byrow=FALSE)
-  activists[,8:10] <- prefs[,1:3]
-  activists[,11:13] <- act.sal[,1:3]
+  activists[,8:10] <- prefs
+  activists[,11:13] <- act.sal
   a.name[14] <- a.name[10]
   a.name[11:13] <- a.name[9]  
   a.name[9:10] <- a.name[8]
@@ -191,14 +197,15 @@ netlogo <- function(x){
   my.cand <- lapply(parties['my-cands-party'], strsplit, split=" ")
   my.cand <- unlist(my.cand)
   my.cand <- matrix(my.cand, nrow=n.party, byrow=TRUE)
+  n.col <- ncol(my.cand)-1
   enfo <- lapply(parties['enforcement-point'], strsplit, split=" ")
   enfo <- unlist(enfo)
   enfo <- matrix(enfo, nrow=n.party, byrow=TRUE)
   parties <- unlist(sapply(parties, strsplit, split=" "))
   parties <- matrix(parties, nrow=n.party, byrow=FALSE)
-  parties[,7:9] <- m.position[,1:3]
-  parties[,11:218] <- my.cand[,]
-  parties[,219:221] <- enfo[,1:3]
+  parties[,7:9] <- m.position
+  parties[,11:(11+n.col)] <- my.cand
+  parties[,219:221] <- enfo
   p.name[223] <- p.name[12]
   p.name[222] <- p.name[11]  
   p.name[219:221] <- p.name[10]
@@ -225,8 +232,8 @@ netlogo <- function(x){
   c.name <- colnames(candidates)
   candidates <- unlist(sapply(candidates, strsplit, split=" "))
   candidates <- matrix(candidates, nrow=n.candi, byrow=FALSE)
-  candidates[,7:9] <- p.obs[,1:3]
-  candidates[,14:16] <- p.obs.l[,1:3]
+  candidates[,7:9] <- p.obs
+  candidates[,14:16] <- p.obs.l
   c.name[14:16] <- c.name[12]
   c.name[13] <- c.name[11]  
   c.name[12] <- c.name[10]
